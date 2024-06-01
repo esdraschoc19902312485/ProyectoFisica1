@@ -1,0 +1,92 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/1mru.css">
+    <title>MRU</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+        <img id="logo" src="img/logo.png">
+        <img id="tipo" src="img/tipo.png">
+
+    
+    <body>
+    
+         <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+        <div class="container">
+            <h1>MRU</h1>
+            <div class="form-group">
+                <label for="operation">Elija la Operación:</label>
+                <select id="operation">
+                    <option value="time">Calcular tiempo (s)</option>
+                    <option value="distance">Calcular distancia (m)</option>
+                    <option value="velocity">Calcular velocidad (m/s)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="unit">Elija el sistema de unidades:</label>
+                <select id="unit">
+                    <option value="si">Sistema Internacional (m, s, m/s)</option>
+                    <option value="metric">Métrico (km, h, km/h)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="distance">Distancia:</label>
+                <input type="number" id="distance" placeholder="Ingrese la distancia">
+            </div>
+            <div class="form-group">
+                <label for="velocity">Velocidad:</label>
+                <input type="number" id="velocity" placeholder="Ingrese la velocidad">
+            </div>
+            <div class="form-group">
+                <label for="time">Tiempo:</label>
+                <input type="number" id="time" placeholder="Ingrese el tiempo">
+            </div>
+            <div class="form-group">
+                <button onclick="calculate()">Calcular</button>
+            </div>
+            <div class="result" id="result"></div>
+        </div>
+
+            <script>
+                function calculate() {
+                    const operation = document.getElementById('operation').value;
+                    const unit = document.getElementById('unit').value;
+                    let distance = parseFloat(document.getElementById('distance').value);
+                    let velocity = parseFloat(document.getElementById('velocity').value);
+                    let time = parseFloat(document.getElementById('time').value);
+                    let result = '';
+
+                    if (unit === 'metric') {
+                        if (!isNaN(distance)) distance *= 1000; // km a m
+                        if (!isNaN(velocity)) velocity /= 3.6; // km/h a m/s
+                        if (!isNaN(time)) time *= 3600; // h a s
+                    }
+
+                    if (operation === 'time') {
+                        if (!isNaN(distance) && !isNaN(velocity) && velocity !== 0) {
+                            result = `El tiempo es: ${(distance / velocity).toFixed(2)} segundos`;
+                        } else {
+                            result = 'ingrese valores válidos para distancia y velocidad.';
+                        }
+                    } else if (operation === 'distance') {
+                        if (!isNaN(velocity) && !isNaN(time)) {
+                            result = `La distancia es: ${(velocity * time).toFixed(2)} metros`;
+                        } else {
+                            result = 'ingrese valores válidos para velocidad y tiempo.';
+                        }
+                    } else if (operation === 'velocity') {
+                        if (!isNaN(distance) && !isNaN(time) && time !== 0) {
+                            result = `La velocidad es: ${(distance / time).toFixed(2)} metros por segundo`;
+                        } else {
+                            result = 'ingrese valores válidos para distancia y tiempo.';
+                        }
+                    }
+
+                    document.getElementById('result').innerText = result;
+                }
+            </script>
+    </body>
+</html>

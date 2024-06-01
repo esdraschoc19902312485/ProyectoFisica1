@@ -1,0 +1,116 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/6mcuv.css">
+    <title>MCUV</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+    <img id="logo" src="img/logo.png">
+    <img id="tipo" src="img/tipo.png">
+
+    <body>
+        <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+        
+<div class="container">
+    <h1>MCUV</h1>
+    <div class="form-group">
+        <label for="operation">Elija la operación:</label>
+        <select id="operation">
+            <option value="final_angular_velocity">Calcular velocidad angular final (rad/s)</option>
+            <option value="angular_displacement">Calcular ángulo recorrido (rad)</option>
+            <option value="initial_angular_velocity">Calcular velocidad angular inicial (rad/s)</option>
+            <option value="angular_acceleration">Calcular aceleración angular (rad/s²)</option>
+            <option value="time">Calcular tiempo (s)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="initial_angular_velocity">Velocidad angular inicial (rad/s):</label>
+        <input type="number" id="initial_angular_velocity" placeholder="Ingrese la velocidad angular inicial">
+    </div>
+    <div class="form-group">
+        <label for="final_angular_velocity">Velocidad angular final (rad/s):</label>
+        <input type="number" id="final_angular_velocity" placeholder="Ingrese la velocidad angular final">
+    </div>
+    <div class="form-group">
+        <label for="angular_acceleration">Aceleración angular (rad/s²):</label>
+        <input type="number" id="angular_acceleration" placeholder="Ingrese la aceleración angular">
+    </div>
+    <div class="form-group">
+        <label for="angular_displacement">Ángulo recorrido (rad):</label>
+        <input type="number" id="angular_displacement" placeholder="Ingrese el ángulo recorrido">
+    </div>
+    <div class="form-group">
+        <label for="time">Tiempo (s):</label>
+        <input type="number" id="time" placeholder="Ingrese el tiempo">
+    </div>
+    <div class="form-group">
+        <button onclick="calculate()">Calcular</button>
+    </div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const operation = document.getElementById('operation').value;
+        let initial_angular_velocity = parseFloat(document.getElementById('initial_angular_velocity').value);
+        let final_angular_velocity = parseFloat(document.getElementById('final_angular_velocity').value);
+        let angular_acceleration = parseFloat(document.getElementById('angular_acceleration').value);
+        let angular_displacement = parseFloat(document.getElementById('angular_displacement').value);
+        let time = parseFloat(document.getElementById('time').value);
+        let result = '';
+
+        switch (operation) {
+            case 'final_angular_velocity':
+                if (!isNaN(initial_angular_velocity) && !isNaN(angular_acceleration) && !isNaN(time)) {
+                    final_angular_velocity = initial_angular_velocity + angular_acceleration * time;
+                    result = `La velocidad angular final es: ${final_angular_velocity.toFixed(2)} rad/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad angular inicial, aceleración angular y tiempo.';
+                }
+                break;
+            case 'angular_displacement':
+                if (!isNaN(initial_angular_velocity) && !isNaN(time) && !isNaN(angular_acceleration)) {
+                    angular_displacement = initial_angular_velocity * time + 0.5 * angular_acceleration * time * time;
+                    result = `El ángulo recorrido es: ${angular_displacement.toFixed(2)} rad`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad angular inicial, aceleración angular y tiempo.';
+                }
+                break;
+            case 'initial_angular_velocity':
+                if (!isNaN(final_angular_velocity) && !isNaN(angular_acceleration) && !isNaN(time)) {
+                    initial_angular_velocity = final_angular_velocity - angular_acceleration * time;
+                    result = `La velocidad angular inicial es: ${initial_angular_velocity.toFixed(2)} rad/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad angular final, aceleración angular y tiempo.';
+                }
+                break;
+            case 'angular_acceleration':
+                if (!isNaN(final_angular_velocity) && !isNaN(initial_angular_velocity) && !isNaN(time)) {
+                    angular_acceleration = (final_angular_velocity - initial_angular_velocity) / time;
+                    result = `La aceleración angular es: ${angular_acceleration.toFixed(2)} rad/s²`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad angular inicial, velocidad angular final y tiempo.';
+                }
+                break;
+            case 'time':
+                if (!isNaN(final_angular_velocity) && !isNaN(initial_angular_velocity) && !isNaN(angular_acceleration) && angular_acceleration !== 0) {
+                    time = (final_angular_velocity - initial_angular_velocity) / angular_acceleration;
+                    result = `El tiempo es: ${time.toFixed(2)} segundos`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad angular inicial, velocidad angular final y aceleración angular.';
+                }
+                break;
+            default:
+                result = 'seleccione una operación válida.';
+                break;
+        }
+
+        document.getElementById('result').innerText = result;
+    }
+</script>
+
+    </body>
+</html>

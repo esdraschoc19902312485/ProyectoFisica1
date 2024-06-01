@@ -1,0 +1,121 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/tp.css">
+    <title>TIRO PARABOLICO</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+    <img id="logo" src="img/logo.png">
+    <img id="tipo" src="img/tipo.png">
+
+    
+    <body>
+    
+         <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+
+<div class="container">
+    <h1>Tiro Parabólico</h1>
+    <div class="form-group">
+        <label for="operation">Elija la operación:</label>
+        <select id="operation">
+            <option value="range">Calcular alcance (m)</option>
+            <option value="max_height">Calcular altura máxima (m)</option>
+            <option value="time_of_flight">Calcular tiempo de vuelo (s)</option>
+            <option value="horizontal_velocity">Calcular velocidad horizontal (m/s)</option>
+            <option value="initial_velocity">Calcular velocidad inicial (m/s)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="initial_velocity">Velocidad inicial (m/s):</label>
+        <input type="number" id="initial_velocity" placeholder="Ingrese la velocidad inicial">
+    </div>
+    <div class="form-group">
+        <label for="angle">Ángulo de lanzamiento (grados):</label>
+        <input type="number" id="angle" placeholder="Ingrese el ángulo de lanzamiento">
+    </div>
+    <div class="form-group">
+        <label for="time">Tiempo (s):</label>
+        <input type="number" id="time" placeholder="Ingrese el tiempo">
+    </div>
+    <div class="form-group">
+        <label for="range">Alcance (m):</label>
+        <input type="number" id="range" placeholder="Ingrese el alcance">
+    </div>
+    <div class="form-group">
+        <button onclick="calculate()">Calcular</button>
+    </div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const operation = document.getElementById('operation').value;
+        const gravity = -9.8;
+        let initial_velocity = parseFloat(document.getElementById('initial_velocity').value);
+        let angle = parseFloat(document.getElementById('angle').value);
+        let time = parseFloat(document.getElementById('time').value);
+        let range = parseFloat(document.getElementById('range').value);
+        let result = '';
+
+        const toRadians = (degrees) => degrees * (Math.PI / 180);
+
+        switch (operation) {
+            case 'range':
+                if (!isNaN(initial_velocity) && !isNaN(angle)) {
+                    const radians = toRadians(angle);
+                    const range = ((initial_velocity ** 2) * Math.sin(2 * radians)) / -gravity;
+                    result = `El alcance es: ${range.toFixed(2)} metros`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y ángulo.';
+                }
+                break;
+            case 'max_height':
+                if (!isNaN(initial_velocity) && !isNaN(angle)) {
+                    const radians = toRadians(angle);
+                    const maxHeight = ((initial_velocity ** 2) * Math.sin(radians) ** 2) / (2 * -gravity);
+                    result = `La altura máxima es: ${maxHeight.toFixed(2)} metros`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y ángulo.';
+                }
+                break;
+            case 'time_of_flight':
+                if (!isNaN(initial_velocity) && !isNaN(angle)) {
+                    const radians = toRadians(angle);
+                    const timeOfFlight = (2 * initial_velocity * Math.sin(radians)) / -gravity;
+                    result = `El tiempo de vuelo es: ${timeOfFlight.toFixed(2)} segundos`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y ángulo.';
+                }
+                break;
+            case 'horizontal_velocity':
+                if (!isNaN(initial_velocity) && !isNaN(angle)) {
+                    const radians = toRadians(angle);
+                    const horizontalVelocity = initial_velocity * Math.cos(radians);
+                    result = `La velocidad horizontal es: ${horizontalVelocity.toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y ángulo.';
+                }
+                break;
+            case 'initial_velocity':
+                if (!isNaN(range) && !isNaN(angle)) {
+                    const radians = toRadians(angle);
+                    const initial_velocity = Math.sqrt((range * -gravity) / Math.sin(2 * radians));
+                    result = `La velocidad inicial es: ${initial_velocity.toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para alcance y ángulo.';
+                }
+                break;
+            default:
+                result = 'seleccione una operación válida.';
+                break;
+        }
+
+        document.getElementById('result').innerText = result;
+    }
+</script>
+
+    </body>
+</html>

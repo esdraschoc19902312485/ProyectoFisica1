@@ -1,0 +1,130 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/2mruv.css">
+    <title>MRV</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+    <img id="logo" src="img/logo.png">
+    <img id="tipo" src="img/tipo.png">
+
+
+    <body>
+        <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+
+<div class="container">
+    <h1>MRUV</h1>
+    <div class="form-group">
+        <label for="operation">Elija la operación:</label>
+        <select id="operation">
+            <option value="final_velocity">Calcular velocidad final (m/s)</option>
+            <option value="distance">Calcular distancia (m)</option>
+            <option value="initial_velocity">Calcular velocidad inicial (m/s)</option>
+            <option value="acceleration">Calcular aceleración (m/s²)</option>
+            <option value="time">Calcular tiempo (s)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="unit">Elija el sistema de unidades:</label>
+        <select id="unit">
+            <option value="si">Sistema Internacional (m, s, m/s, m/s²)</option>
+            <option value="metric">Métrico (km, h, km/h, km/h²)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="initial_velocity">Velocidad inicial (m/s):</label>
+        <input type="number" id="initial_velocity" placeholder="Ingrese la velocidad inicial">
+    </div>
+    <div class="form-group">
+        <label for="final_velocity">Velocidad final (m/s):</label>
+        <input type="number" id="final_velocity" placeholder="Ingrese la velocidad final">
+    </div>
+    <div class="form-group">
+        <label for="acceleration">Aceleración (m/s²):</label>
+        <input type="number" id="acceleration" placeholder="Ingrese la aceleración">
+    </div>
+    <div class="form-group">
+        <label for="distance">Distancia (m):</label>
+        <input type="number" id="distance" placeholder="Ingrese la distancia">
+    </div>
+    <div class="form-group">
+        <label for="time">Tiempo (s):</label>
+        <input type="number" id="time" placeholder="Ingrese el tiempo">
+    </div>
+    <div class="form-group">
+        <button onclick="calculate()">Calcular</button>
+    </div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const operation = document.getElementById('operation').value;
+        const unit = document.getElementById('unit').value;
+        let initial_velocity = parseFloat(document.getElementById('initial_velocity').value);
+        let final_velocity = parseFloat(document.getElementById('final_velocity').value);
+        let acceleration = parseFloat(document.getElementById('acceleration').value);
+        let distance = parseFloat(document.getElementById('distance').value);
+        let time = parseFloat(document.getElementById('time').value);
+        let result = '';
+
+        if (unit === 'metric') {
+            if (!isNaN(initial_velocity)) initial_velocity /= 3.6; // km/h to m/s
+            if (!isNaN(final_velocity)) final_velocity /= 3.6; // km/h to m/s
+            if (!isNaN(acceleration)) acceleration /= 12960; // km/h² to m/s²
+        }
+
+        switch (operation) {
+            case 'final_velocity':
+                if (!isNaN(initial_velocity) && !isNaN(acceleration) && !isNaN(time)) {
+                    result = `La velocidad final es: ${(initial_velocity + acceleration * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial, aceleración y tiempo.';
+                }
+                break;
+            case 'distance':
+                if (!isNaN(initial_velocity) && !isNaN(time) && !isNaN(acceleration)) {
+                    result = `La distancia es: ${(initial_velocity * time + 0.5 * acceleration * time * time).toFixed(2)} metros`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial, aceleración y tiempo.';
+                }
+                break;
+            case 'initial_velocity':
+                if (!isNaN(final_velocity) && !isNaN(acceleration) && !isNaN(time)) {
+                    result = `La velocidad inicial es: ${(final_velocity - acceleration * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad final, aceleración y tiempo.';
+                }
+                break;
+            case 'acceleration':
+                if (!isNaN(final_velocity) && !isNaN(initial_velocity) && !isNaN(time)) {
+                    const acceleration1 = (final_velocity - initial_velocity) / time;
+                    const acceleration2 = (initial_velocity - final_velocity) / time;
+                    result = `La aceleración es: ${acceleration1.toFixed(2)} m/s² (positiva) o ${acceleration2.toFixed(2)} m/s² (negativa)`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial, velocidad final y tiempo.';
+                }
+                break;
+            case 'time':
+                if (!isNaN(final_velocity) && !isNaN(initial_velocity) && !isNaN(acceleration) && acceleration !== 0) {
+                    const time1 = (final_velocity - initial_velocity) / acceleration;
+                    const time2 = (initial_velocity - final_velocity) / acceleration;
+                    result = `El tiempo es: ${time1.toFixed(2)} segundos (positiva) o ${time2.toFixed(2)} segundos (negativa)`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial, velocidad final y aceleración.';
+                }
+                break;
+            default:
+                result = 'seleccione una operación válida.';
+                break;
+        }
+
+        document.getElementById('result').innerText = result;
+    }
+</script>
+
+    </body>
+</html>

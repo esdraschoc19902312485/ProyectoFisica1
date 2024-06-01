@@ -1,0 +1,110 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/4tv.css">
+    <title>TV</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+    <img id="logo" src="img/logo.png">
+    <img id="tipo" src="img/tipo.png">
+
+    <body>
+        <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+        
+<div class="container">
+    <h1>Tiro Vertical</h1>
+    <div class="form-group">
+        <label for="operation">Elija la operación:</label>
+        <select id="operation">
+            <option value="final_velocity">Calcular velocidad final (m/s)</option>
+            <option value="max_height">Calcular altura máxima (m)</option>
+            <option value="time_up">Calcular tiempo de subida (s)</option>
+            <option value="total_time">Calcular tiempo total (s)</option>
+            <option value="initial_velocity">Calcular velocidad inicial (m/s)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="initial_velocity">Velocidad inicial (m/s):</label>
+        <input type="number" id="initial_velocity" placeholder="Ingrese la velocidad inicial">
+    </div>
+    <div class="form-group">
+        <label for="final_velocity">Velocidad final (m/s):</label>
+        <input type="number" id="final_velocity" placeholder="Ingrese la velocidad final">
+    </div>
+    <div class="form-group">
+        <label for="max_height">Altura máxima (m):</label>
+        <input type="number" id="max_height" placeholder="Ingrese la altura máxima">
+    </div>
+    <div class="form-group">
+        <label for="time">Tiempo (s):</label>
+        <input type="number" id="time" placeholder="Ingrese el tiempo">
+    </div>
+    <div class="form-group">
+        <button onclick="calculate()">Calcular</button>
+    </div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const operation = document.getElementById('operation').value;
+        const gravity = -9.8;
+        let initial_velocity = parseFloat(document.getElementById('initial_velocity').value);
+        let final_velocity = parseFloat(document.getElementById('final_velocity').value);
+        let max_height = parseFloat(document.getElementById('max_height').value);
+        let time = parseFloat(document.getElementById('time').value);
+        let result = '';
+
+        switch (operation) {
+            case 'final_velocity':
+                if (!isNaN(initial_velocity) && !isNaN(time)) {
+                    result = `La velocidad final es: ${(initial_velocity + gravity * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y tiempo.';
+                }
+                break;
+            case 'max_height':
+                if (!isNaN(initial_velocity) && !isNaN(time)) {
+                    result = `La altura máxima es: ${(initial_velocity * time + 0.5 * gravity * time * time).toFixed(2)} metros`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y tiempo.';
+                }
+                break;
+            case 'time_up':
+                if (!isNaN(initial_velocity) && gravity !== 0) {
+                    const time_up = -initial_velocity / gravity;
+                    result = `El tiempo de subida es: ${time_up.toFixed(2)} segundos`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial.';
+                }
+                break;
+            case 'total_time':
+                if (!isNaN(initial_velocity) && gravity !== 0) {
+                    const time_up = -initial_velocity / gravity;
+                    const total_time = 2 * time_up;
+                    result = `El tiempo total es: ${total_time.toFixed(2)} segundos`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial.';
+                }
+                break;
+            case 'initial_velocity':
+                if (!isNaN(final_velocity) && !isNaN(time)) {
+                    result = `La velocidad inicial es: ${(final_velocity - gravity * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad final y tiempo.';
+                }
+                break;
+            default:
+                result = 'seleccione una operación válida.';
+                break;
+        }
+
+        document.getElementById('result').innerText = result;
+    }
+</script>
+
+    </body>
+</html>

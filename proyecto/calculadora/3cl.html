@@ -1,0 +1,100 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/3cl.css">
+    <title>CL</title>
+</head>
+    
+    <video id="fondo" src="vid/FONDO.mp4" autoplay muted loop></video>
+    <img id="logo" src="img/logo.png">
+    <img id="tipo" src="img/tipo.png">
+
+    <body>
+        <a href="index.html"><button id=boton>VOLVER A MENU</button></a>
+        
+        
+<div class="container">
+    <h1>Caída Libre</h1>
+    <div class="form-group">
+        <label for="operation">Elija la operación:</label>
+        <select id="operation">
+            <option value="final_velocity">Calcular velocidad final (m/s)</option>
+            <option value="distance">Calcular distancia (m)</option>
+            <option value="initial_velocity">Calcular velocidad inicial (m/s)</option>
+            <option value="time">Calcular tiempo (s)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="initial_velocity">Velocidad inicial (m/s):</label>
+        <input type="number" id="initial_velocity" placeholder="Ingrese la velocidad inicial">
+    </div>
+    <div class="form-group">
+        <label for="final_velocity">Velocidad final (m/s):</label>
+        <input type="number" id="final_velocity" placeholder="Ingrese la velocidad final">
+    </div>
+    <div class="form-group">
+        <label for="distance">Distancia (m):</label>
+        <input type="number" id="distance" placeholder="Ingrese la distancia">
+    </div>
+    <div class="form-group">
+        <label for="time">Tiempo (s):</label>
+        <input type="number" id="time" placeholder="Ingrese el tiempo">
+    </div>
+    <div class="form-group">
+        <button onclick="calculate()">Calcular</button>
+    </div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const operation = document.getElementById('operation').value;
+        const gravity = -9.8;
+        let initial_velocity = parseFloat(document.getElementById('initial_velocity').value);
+        let final_velocity = parseFloat(document.getElementById('final_velocity').value);
+        let distance = parseFloat(document.getElementById('distance').value);
+        let time = parseFloat(document.getElementById('time').value);
+        let result = '';
+
+        switch (operation) {
+            case 'final_velocity':
+                if (!isNaN(initial_velocity) && !isNaN(time)) {
+                    result = `La velocidad final es: ${(initial_velocity + gravity * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y tiempo.';
+                }
+                break;
+            case 'distance':
+                if (!isNaN(initial_velocity) && !isNaN(time)) {
+                    result = `La distancia es: ${(initial_velocity * time + 0.5 * gravity * time * time).toFixed(2)} metros`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y tiempo.';
+                }
+                break;
+            case 'initial_velocity':
+                if (!isNaN(final_velocity) && !isNaN(time)) {
+                    result = `La velocidad inicial es: ${(final_velocity - gravity * time).toFixed(2)} m/s`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad final y tiempo.';
+                }
+                break;
+            case 'time':
+                if (!isNaN(final_velocity) && !isNaN(initial_velocity) && gravity !== 0) {
+                    const time = (final_velocity - initial_velocity) / gravity;
+                    result = `El tiempo es: ${time.toFixed(2)} segundos`;
+                } else {
+                    result = 'ingrese valores válidos para velocidad inicial y velocidad final.';
+                }
+                break;
+            default:
+                result = 'seleccione una operación válida.';
+                break;
+        }
+
+        document.getElementById('result').innerText = result;
+    }
+</script>
+
+    </body>
+</html>
